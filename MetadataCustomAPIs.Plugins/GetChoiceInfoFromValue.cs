@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -75,9 +76,10 @@ namespace MetadataCustomAPIs.Plugins
                                             foreach (LocalizedLabel localizedLabel in option.Label.LocalizedLabels)
                                             {
                                                 string currentLabel = localizedLabel.Label;
+                                                if (string.IsNullOrWhiteSpace(currentLabel)) { currentLabel = ""; } else { currentLabel = currentLabel.Replace("\"", "\\\""); }
                                                 int currentLanguageCode = localizedLabel.LanguageCode;
 
-                                                allLanguageLabels += $"\"LanguageCode\": {currentLanguageCode}, \"Label\": \"{currentLabel}\",";
+                                                allLanguageLabels += $"{{\"LanguageCode\": {currentLanguageCode}, \"Label\": \"{currentLabel}\"}},";
 
                                                 if (languageCode.HasValue && languageCode != 0 && localizedLabel.LanguageCode == languageCode.Value)
                                                 {
